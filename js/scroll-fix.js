@@ -55,4 +55,6 @@
 
 	window.addEventListener('pageLoadComplete', init);
 	init();
+	
+
 }(Zepto);

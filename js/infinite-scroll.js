@@ -52,4 +52,6 @@
         }
         pageContainer.on('pageBeforeRemove', detachEvents);
     };
+  
+  
 }(Zepto); 
