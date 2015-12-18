@@ -23,6 +23,7 @@
         this.stack = sessionStorage;
         this.stack.setItem("back", "[]");  //返回栈, {url, pageid, stateid}
         this.stack.setItem("forward", "[]");  //前进栈, {url, pageid, stateid}
+        this.linkTarget=$();
         this.init();
         this.xhr = null;
         // 解决各个webview针对页面重新加载（包括后退造成的）时History State的处理差异，加此标志位
@@ -122,7 +123,14 @@
             'page-from-center-to-right',
             'page-from-right-to-center',
             'page-from-left-to-center'].join(' ');
-
+            //在链接上增加属性“direction”来控制需要的动画效果
+        if(Router.linkTarget.attr('direction')=='left'&&!Router.linkTarget.hasClass('back')){
+            leftToRight=true;
+            leftPage = [rightPage,rightPage=leftPage][0];
+        }else if(Router.linkTarget.attr('direction')=='right'){
+            leftToRight=false;
+            leftPage = [rightPage,rightPage=leftPage][0];
+        }
         if (!leftToRight) {
             // 新页面从右侧切入
             rightPage.trigger("pageAnimationStart", [rightPage[0].id, rightPage]);
@@ -332,6 +340,7 @@
         var router = $.router = new Router();
         $(document).on("click", "a", function(e) {
             var $target = $(e.currentTarget);
+            Router.linkTarget = $target;
             if ($target.hasClass("external") ||
                 $target[0].hasAttribute("external") ||
                 $target.hasClass("tab-link") ||
